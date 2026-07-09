@@ -78,11 +78,23 @@ If the backend/token isn't set up, the app quietly falls back to a stylised
 
 ---
 
+## Getting a good likeness (important)
+
+The AI keeps the face far better when the **input selfie** is:
+front-facing, evenly lit, no hat, no heavy filter, hair off the forehead, and
+reasonably sharp. Side angles, shadows and filters are the main reason a result
+"doesn't look like me". The upload screen now tells guests this.
+
+If likeness still isn't strong enough, switch to the higher-fidelity model:
+in Vercel → Settings → Environment Variables add
+`REPLICATE_MODEL = black-forest-labs/flux-kontext-max`, then redeploy.
+
 ## Tuning
 
 - **Prompts:** edit the `STYLES` array in `public/index.html` (each has a `prompt`).
-- **Model:** change `MODEL` in `api/generate.js` (e.g. `flux-kontext-max` for
-  higher quality, or a dedicated hairstyle model).
+  They use edit-instruction phrasing ("Change only the hairstyle… do not alter
+  the face") which preserves identity much better than "give this person…".
+- **Model:** set `REPLICATE_MODEL` env var (no code change needed).
 - **Cost control:** consider adding a simple rate limit or a per-session cap
   before sharing the link widely.
 

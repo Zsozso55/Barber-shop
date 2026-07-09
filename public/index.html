@@ -198,7 +198,7 @@
             <div class="pad" style="padding-bottom:6px">
               <div class="eyebrow">Step 1 of 3</div>
               <h2 class="big" style="font-size:22px">Upload your selfie</h2>
-              <p class="lede">Face the camera in good light. We only use it to preview styles.</p>
+              <p class="lede">For the best likeness: look <b>straight at the camera</b>, good even light, <b>no hat, no filter</b>, hair off the forehead. A clear, sharp photo keeps your face recognisable.</p>
             </div>
             <label class="upload" id="dropzone">
               <input type="file" accept="image/*" id="fileInput" hidden>
@@ -235,6 +235,13 @@
               <div class="spinner"></div>
               <b style="letter-spacing:1px">Styling your preview…</b>
               <p class="lede" style="margin-top:6px" id="genMsg">Detecting face shape</p>
+            </div>
+            <div id="genError" class="genwrap" hidden>
+              <div style="font-size:44px">⚠️</div>
+              <b style="letter-spacing:.5px">Couldn’t generate the preview</b>
+              <p class="lede" style="margin-top:8px" id="genErrMsg">Something went wrong.</p>
+              <div class="pad"><button class="btn" onclick="generate()">Try again</button>
+              <button class="btn ghost" onclick="go('styles')">Pick another style</button></div>
             </div>
             <div id="genResult" hidden>
               <div class="pad" style="padding-bottom:6px">
@@ -336,14 +343,18 @@
 
 <script>
 /* ---------------- DATA ---------------- */
-const KEEP = " Keep the exact same face, identity, skin tone, expression and background unchanged. Photorealistic.";
+// Edit-instruction phrasing + explicit face-lock preserves identity far better.
+// Hair LENGTH is stated explicitly so longer styles actually grow hair
+// instead of defaulting to short.
+const KEEP = ". Keep the exact same face, the same person's identity, facial features, eyes, nose, mouth, skin tone, expression, head angle, lighting and background completely unchanged. Do not alter the face at all — change only the hair. Photorealistic, natural-looking hair with realistic texture.";
+const LEAD = "Completely replace this exact person's current hairstyle with ";
 const STYLES = [
-  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:"Give this person a clean skin fade haircut with a short textured crop on top."+KEEP},
-  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:"Give this person a textured French crop haircut with a short blunt fringe and faded sides."+KEEP},
-  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:"Give this person a classic pompadour hairstyle with volume and height on top and neat tapered sides."+KEEP},
-  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:"Give this person a short uniform buzz cut, evenly clipped all over."+KEEP},
-  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:"Give this person a curly top haircut with defined natural curls and tapered sides."+KEEP},
-  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:"Give this person a slicked-back hairstyle with a sharp mid fade on the sides."+KEEP},
+  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:LEAD+"a modern men's skin fade: sides and back shaved down to a smooth fade, and a short textured crop about 3-4 cm long on top, neatly styled"+KEEP},
+  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:LEAD+"a men's French crop: faded sides and a textured top about 4-5 cm long with a short blunt fringe falling forward onto the forehead"+KEEP},
+  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:LEAD+"a tall classic pompadour: noticeably LONGER hair on top, about 10-12 cm long, swept upward and back into high glossy volume, with short tapered sides. Add clear length and height on top"+KEEP},
+  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:LEAD+"a very short uniform buzz cut, roughly 3 mm of hair evenly clipped all over the whole head"+KEEP},
+  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:LEAD+"a full head of LONGER curly hair on top, about 6-8 cm long, with defined springy natural curls and volume, and short tapered sides. Add clear length and curl volume"+KEEP},
+  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:LEAD+"LONGER hair on top, about 8-10 cm long, slicked straight back with a smooth glossy finish, and a sharp mid fade on the sides. Add clear length on top"+KEEP},
 ];
 
 /* ---- Haircut illustrations (self-contained SVG, no external images) ---- */
@@ -464,6 +475,7 @@ async function generate(){
   go('result');
   document.getElementById('genLoading').hidden=false;
   document.getElementById('genResult').hidden=true;
+  document.getElementById('genError').hidden=true;
   const m=document.getElementById('genMsg');
   const msgs=['Detecting face shape','Mapping hairline','Applying '+chosenStyle.name,'Rendering photorealistic result'];
   let i=0; const t=setInterval(()=>{ i=(i+1)%msgs.length; m.textContent=msgs[i]; },1400);
@@ -477,7 +489,7 @@ async function generate(){
     });
     const data=await resp.json();
     clearInterval(t);
-    if(!resp.ok||!data.output) throw new Error(data.error||'Generation failed');
+    if(!resp.ok||!data.output) throw new Error(data.error||('HTTP '+resp.status));
     document.getElementById('genLoading').hidden=true;
     const R=document.getElementById('genResult'); R.hidden=false;
     document.getElementById('resultName').textContent=chosenStyle.name;
@@ -487,14 +499,11 @@ async function generate(){
     a.src=data.output;               // real AI-generated image
   }catch(err){
     clearInterval(t);
-    // graceful fallback so a live pitch never shows a blank screen
+    // Show the REAL error instead of a misleading filtered copy of the selfie.
     document.getElementById('genLoading').hidden=true;
-    const R=document.getElementById('genResult'); R.hidden=false;
-    document.getElementById('resultName').textContent=chosenStyle.name;
-    document.getElementById('beforeImg').src=src;
-    const a=document.getElementById('afterImg');
-    a.src=src; a.style.filter=chosenStyle.filter; a.style.transform='scale(1.06)';
-    toast('Preview mode (AI not connected)');
+    document.getElementById('genResult').hidden=true;
+    document.getElementById('genError').hidden=false;
+    document.getElementById('genErrMsg').textContent=String(err.message||err);
   }
 }
 

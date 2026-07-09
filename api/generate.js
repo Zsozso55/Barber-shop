@@ -7,7 +7,9 @@
 
 export const maxDuration = 60; // allow up to 60s for the model to finish
 
-const MODEL = "black-forest-labs/flux-kontext-pro";
+// Default is flux-kontext-pro. For higher fidelity, set REPLICATE_MODEL to
+// "black-forest-labs/flux-kontext-max" in your Vercel env vars (costs a bit more).
+const MODEL = process.env.REPLICATE_MODEL || "black-forest-labs/flux-kontext-pro";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
