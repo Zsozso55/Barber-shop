@@ -8,6 +8,6 @@
     "gen:styles": "node scripts/generate-styles.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": "22.x"
   }
 }
