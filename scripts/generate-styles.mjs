@@ -9,6 +9,7 @@
 // Cost: 6 images on FLUX schnell = a few US cents total.
 
 import { writeFile, mkdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -81,9 +82,22 @@ async function generate(style) {
 }
 
 await mkdir(OUT, { recursive: true });
-console.log("Generating 6 style images with " + MODEL + " ...");
+// Set FORCE=1 to regenerate images that already exist.
+const force = process.env.FORCE === "1";
+console.log("Generating style images with " + MODEL + " ...");
 for (const s of STYLES) {
-  try { await generate(s); }
-  catch (e) { console.error("✗ " + s.id + ": " + e.message); }
+  const file = join(OUT, s.id + ".jpg");
+  if (!force && existsSync(file)) {
+    console.log("• skip styles/" + s.id + ".jpg (already exists)");
+    continue;
+  }
+  let ok = false;
+  for (let attempt = 1; attempt <= 2 && !ok; attempt++) {
+    try { await generate(s); ok = true; }
+    catch (e) {
+      console.error("✗ " + s.id + " (try " + attempt + "): " + e.message);
+      if (attempt < 2) await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
 }
 console.log("Done.");
