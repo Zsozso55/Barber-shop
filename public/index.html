@@ -95,7 +95,7 @@
   .ba figure{margin-top:6px;border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:#0a0b0e;display:grid;place-items:center;position:relative}
   .ba figure img{width:100%;height:100%;object-fit:cover}
   .ba .after figure{border:1px solid var(--gold)}
-  .wm{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:var(--gold2);font-size:8px;letter-spacing:1.5px;padding:3px 6px;border-radius:6px}
+  .wm{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.45);color:var(--gold2);font-size:7px;letter-spacing:1px;padding:2px 5px;border-radius:5px;opacity:.85}
   .genwrap{text-align:center;padding:40px 20px}
   .spinner{width:54px;height:54px;border:4px solid var(--line);border-top-color:var(--gold);border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -346,7 +346,7 @@
 // Edit-instruction phrasing + explicit face-lock preserves identity far better.
 // Hair LENGTH is stated explicitly so longer styles actually grow hair
 // instead of defaulting to short.
-const KEEP = ". Keep the exact same face, the same person's identity, facial features, eyes, nose, mouth, skin tone, expression, head angle, lighting and background completely unchanged. Do not alter the face at all — change only the hair. Photorealistic, natural-looking hair with realistic texture.";
+const KEEP = ". Keep the exact same face and the same person's identity: same facial features, eyes, nose, mouth, wrinkles, age, skin tone and texture, expression, head angle, lighting and background — all completely unchanged. Keep his existing beard and moustache exactly the same. Keep his natural hair colour exactly the same, including any grey or salt-and-pepper — do NOT darken the hair and do NOT make him look younger. Change only the SHAPE and length of the hair, never the colour. Same recognisable person. Photorealistic, natural hair texture.";
 const LEAD = "Completely replace this exact person's current hairstyle with ";
 const STYLES = [
   {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:LEAD+"a modern men's skin fade: sides and back shaved down to a smooth fade, and a short textured crop about 3-4 cm long on top, neatly styled"+KEEP},
