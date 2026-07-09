@@ -1,0 +1,13 @@
+{
+  "name": "ironhill-ai-barber-live",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live AI hairstyle try-on demo — static PWA + Vercel serverless function calling Replicate FLUX Kontext.",
+  "type": "module",
+  "scripts": {
+    "gen:styles": "node scripts/generate-styles.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
