@@ -351,10 +351,10 @@ const LEAD = "Completely replace this exact person's current hairstyle with ";
 const STYLES = [
   {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:LEAD+"a modern men's skin fade: sides and back shaved down to a smooth fade, and a short textured crop about 3-4 cm long on top, neatly styled"+KEEP},
   {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:LEAD+"a men's French crop: faded sides and a textured top about 4-5 cm long with a short blunt fringe falling forward onto the forehead"+KEEP},
-  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:LEAD+"a tall classic pompadour: noticeably LONGER hair on top, about 10-12 cm long, swept upward and back into high glossy volume, with short tapered sides. Add clear length and height on top"+KEEP},
+  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:LEAD+"a big classic pompadour with a LOT of hair length on top. The hair on top must be LONG, thick and full — at least 12-15 cm, clearly grown out over several months — swept high up and back into a tall voluminous quiff. The top is unmistakably long hair, definitely NOT short. Short tapered sides"+KEEP},
   {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:LEAD+"a very short uniform buzz cut, roughly 3 mm of hair evenly clipped all over the whole head"+KEEP},
-  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:LEAD+"a full head of LONGER curly hair on top, about 6-8 cm long, with defined springy natural curls and volume, and short tapered sides. Add clear length and curl volume"+KEEP},
-  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:LEAD+"LONGER hair on top, about 8-10 cm long, slicked straight back with a smooth glossy finish, and a sharp mid fade on the sides. Add clear length on top"+KEEP},
+  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:LEAD+"a full head of LONG, thick curly hair on top — clearly grown out, about 10-14 cm of big voluminous defined curls piled up and covering the top of the head, with tapered sides. The curls are long and full, definitely NOT short"+KEEP},
+  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:LEAD+"LONG hair on top — at least 13-15 cm, clearly grown out — slicked straight back into a smooth glossy length that reaches toward the back of the head, with a sharp mid fade on the sides. The top is unmistakably long hair, definitely NOT short"+KEEP},
 ];
 
 /* ---- Haircut illustrations (self-contained SVG, no external images) ---- */
@@ -437,18 +437,21 @@ fileInput.addEventListener('change',e=>{
   const r=new FileReader(); r.onload=ev=>downscale(ev.target.result,setPhoto); r.readAsDataURL(f);
 });
 function useDemoFace(){ setPhoto(DEMO_FACE); }
-// shrink big phone photos so the upload stays small and fast (max 1024px, jpeg)
-function downscale(src,cb){
-  const img=new Image();
-  img.onload=()=>{
-    const max=1024; let{width:w,height:h}=img;
+// Shrink big phone photos, but RESPECT EXIF orientation (phones tag rotation
+// instead of rotating pixels). createImageBitmap with imageOrientation:'from-image'
+// bakes the correct rotation in, so the AI never gets a sideways face.
+async function downscale(src,cb){
+  try{
+    const blob=await (await fetch(src)).blob();
+    let bmp;
+    try{ bmp=await createImageBitmap(blob,{imageOrientation:'from-image'}); }
+    catch(_){ bmp=await createImageBitmap(blob); }
+    const max=1280; let w=bmp.width,h=bmp.height;
     if(w>max||h>max){ const s=Math.min(max/w,max/h); w=Math.round(w*s); h=Math.round(h*s); }
     const c=document.createElement('canvas'); c.width=w; c.height=h;
-    c.getContext('2d').drawImage(img,0,0,w,h);
-    cb(c.toDataURL('image/jpeg',0.9));
-  };
-  img.onerror=()=>cb(src);
-  img.src=src;
+    c.getContext('2d').drawImage(bmp,0,0,w,h);
+    cb(c.toDataURL('image/jpeg',0.92));
+  }catch(e){ cb(src); }
 }
 function setPhoto(src){
   photo=src;
