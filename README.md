@@ -85,9 +85,11 @@ front-facing, evenly lit, no hat, no heavy filter, hair off the forehead, and
 reasonably sharp. Side angles, shadows and filters are the main reason a result
 "doesn't look like me". The upload screen now tells guests this.
 
-If likeness still isn't strong enough, switch to the higher-fidelity model:
-in Vercel → Settings → Environment Variables add
-`REPLICATE_MODEL = black-forest-labs/flux-kontext-max`, then redeploy.
+**Model choice matters most for likeness.** The default is now
+`google/nano-banana` (Gemini 2.5 Flash Image), which preserves the face, age,
+grey hair and beard far better than FLUX Kontext. Set it in Vercel →
+Settings → Environment Variables: `REPLICATE_MODEL = google/nano-banana`,
+then redeploy. (Uses the same Replicate token — no new account needed.)
 
 ## Tuning
 
