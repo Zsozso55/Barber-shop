@@ -347,15 +347,17 @@
 
 <script>
 /* ---------------- DATA ---------------- */
-// Try-on prompts = the exact demo prompts from AI-Fejek-Profilkepek-Promptok.html.
-// The client's uploaded selfie is the "base model image".
+// Try-on prompts: keep the uploaded photo's face, facial hair, CLOTHES and
+// background — change ONLY the haircut. (The uploaded selfie is the base image.)
+const LEAD = "Change only the haircut of the person in this photo to ";
+const KEEP = ". Keep the exact same face and identity, and keep the same beard and moustache exactly — do NOT remove or shrink any facial hair. Keep the person's natural hair colour. Keep the exact same clothes the person is already wearing in the photo, and keep the same background — do not change the outfit or the background. Change nothing except the hairstyle. Photorealistic, natural hair texture, clearly the same recognisable person.";
 const STYLES = [
-  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:"Use the base model image. Same man, same face and identity, same dark-brown hair colour, same charcoal-grey t-shirt, same grey background — only the haircut changes to a clean modern skin fade with a short textured top. Photorealistic, vertical 3:4, front view, single portrait, no grid, 4K."},
-  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a textured French crop with faded sides and a short blunt fringe. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
-  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a classic pompadour with volume and height on top and neatly tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
-  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a short uniform buzz cut clipped evenly all over. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
-  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a curly top with defined natural curls and tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
-  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a slicked-back style with a sharp mid fade on the sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
+  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:LEAD+"a clean modern skin fade with a short textured top"+KEEP},
+  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:LEAD+"a textured French crop with faded sides and a short blunt fringe"+KEEP},
+  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:LEAD+"a classic pompadour with volume and height on top and neatly tapered sides"+KEEP},
+  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:LEAD+"a short uniform buzz cut clipped evenly all over"+KEEP},
+  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:LEAD+"a curly top with defined natural curls and tapered sides"+KEEP},
+  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:LEAD+"a slicked-back style with a sharp mid fade on the sides"+KEEP},
 ];
 
 /* ---- Haircut illustrations (self-contained SVG, no external images) ---- */
