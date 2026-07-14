@@ -347,18 +347,15 @@
 
 <script>
 /* ---------------- DATA ---------------- */
-// Edit-instruction phrasing + explicit face-lock preserves identity far better.
-// Hair LENGTH is stated explicitly so longer styles actually grow hair
-// instead of defaulting to short.
-const KEEP = ". Keep the exact same face and the same person's identity: same facial features, eyes, nose, mouth, wrinkles, age, skin tone and texture, expression, head angle, lighting and background — all completely unchanged. Keep his existing beard and moustache exactly the same. Keep his natural hair colour exactly the same, including any grey or salt-and-pepper — do NOT darken the hair and do NOT make him look younger. Change only the SHAPE and length of the hair, never the colour. Same recognisable person. Photorealistic, natural hair texture.";
-const LEAD = "Completely replace this exact person's current hairstyle with ";
+// Try-on prompts = the exact demo prompts from AI-Fejek-Profilkepek-Promptok.html.
+// The client's uploaded selfie is the "base model image".
 const STYLES = [
-  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:LEAD+"a modern men's skin fade: sides and back shaved down to a smooth fade, and a short textured crop about 3-4 cm long on top, neatly styled"+KEEP},
-  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:LEAD+"a men's French crop: faded sides and a textured top about 4-5 cm long with a short blunt fringe falling forward onto the forehead"+KEEP},
-  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:LEAD+"a big classic pompadour with a LOT of hair length on top. The hair on top must be LONG, thick and full — at least 12-15 cm, clearly grown out over several months — swept high up and back into a tall voluminous quiff. The top is unmistakably long hair, definitely NOT short. Short tapered sides"+KEEP},
-  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:LEAD+"a very short uniform buzz cut, roughly 3 mm of hair evenly clipped all over the whole head"+KEEP},
-  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:LEAD+"a full head of LONG, thick curly hair on top — clearly grown out, about 10-14 cm of big voluminous defined curls piled up and covering the top of the head, with tapered sides. The curls are long and full, definitely NOT short"+KEEP},
-  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:LEAD+"LONG hair on top — at least 13-15 cm, clearly grown out — slicked straight back into a smooth glossy length that reaches toward the back of the head, with a sharp mid fade on the sides. The top is unmistakably long hair, definitely NOT short"+KEEP},
+  {id:'fade', name:'The Fade', desc:'Skin fade · textured top', icon:'💈', filter:'contrast(1.05) saturate(1.05)', prompt:"Use the base model image. Same man, same face and identity, same dark-brown hair colour, same charcoal-grey t-shirt, same grey background — only the haircut changes to a clean modern skin fade with a short textured top. Photorealistic, vertical 3:4, front view, single portrait, no grid, 4K."},
+  {id:'crop', name:'Textured Crop', desc:'French crop · fringe', icon:'✂️', filter:'brightness(1.03) contrast(1.08)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a textured French crop with faded sides and a short blunt fringe. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
+  {id:'pomp', name:'Pompadour', desc:'Volume · classic', icon:'🎩', filter:'sepia(.12) contrast(1.05)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a classic pompadour with volume and height on top and neatly tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
+  {id:'buzz', name:'Buzz Cut', desc:'Uniform · low-maintenance', icon:'⚡', filter:'grayscale(.15) contrast(1.1)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a short uniform buzz cut clipped evenly all over. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
+  {id:'curl', name:'Curly Top', desc:'Defined curls · taper', icon:'🌀', filter:'saturate(1.15)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a curly top with defined natural curls and tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
+  {id:'slick', name:'Slick Back', desc:'Mid fade · sharp', icon:'🪄', filter:'contrast(1.1) brightness(.98)', prompt:"Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a slicked-back style with a sharp mid fade on the sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K."},
 ];
 
 /* ---- Haircut illustrations (self-contained SVG, no external images) ---- */
