@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRONHILL — AI Heads &amp; Profile Pictures · Prompt Pack</title>
+<style>
+  :root{
+    --bg:#0f100f; --panel:#17181a; --panel2:#1c1e21; --line:#2b2d31; --ink:#f2efe8;
+    --muted:#9a9d9a; --gold:#c8a45c; --gold2:#e6c987; --img:#7db7ff; --font:'Helvetica Neue',Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 20px 70px}
+  header.top{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:22px}
+  .logo{width:50px;height:50px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-size:22px;color:var(--gold2)}
+  header h1{font-size:19px;letter-spacing:3px;font-weight:800}
+  header small{display:block;color:var(--muted);font-size:10px;letter-spacing:3px;margin-top:2px}
+  h2.sec{font-size:13px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin:30px 0 14px;border-left:3px solid var(--gold);padding-left:10px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .card p{color:#cfccc4;font-size:13.5px;line-height:1.6}.card p+p{margin-top:8px}
+  .lead{color:#efe9dc;font-weight:700}
+  .warn{background:#251a12;border:1px solid #5a3d22;border-left:3px solid var(--gold);border-radius:10px;padding:13px 15px;font-size:13.5px;color:#f0e4d4;line-height:1.6;margin:12px 0}
+  .note{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:13px;color:#d7d4cc;line-height:1.6;margin:12px 0}
+  .box{margin-top:10px;background:#0c0d0c;border:1px solid var(--line);border-left:3px solid var(--img);border-radius:10px;padding:11px 12px}
+  .box .lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:700;color:var(--img);display:flex;justify-content:space-between;gap:10px}
+  .box .lbl .f{color:var(--gold2);font-family:ui-monospace,monospace;text-transform:none;letter-spacing:0}
+  .box code{color:#e8e6df;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;display:block}
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+  td{color:#d7d4cc}
+  code.inline{background:#0c0d0c;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-family:ui-monospace,monospace;font-size:12px;color:var(--gold2)}
+  @media print{body{background:#fff;color:#111}.card,.note,.warn{background:#fff;border-color:#ccc;break-inside:avoid}.box{background:#f5f5f3}.box code{color:#123}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">&#9986;</div>
+    <div><h1>IRONHILL</h1><small>AI HEADS &amp; PROFILE PICTURES · PROMPT PACK (Nano Banana 2)</small></div>
+  </header>
+
+  <div class="warn">
+    <b>Why your test came out terrible.</b> You almost certainly uploaded the <b>2×2 reference sheet</b> (4 faces in one image) into the try-on. The AI then tried to cut hair across a collage of four heads → a mess. <b>Always upload ONE single, cropped, front-facing face</b> — never the grid, never a 3/4 angle. Every prompt below makes a single clean portrait for exactly this reason.
+  </div>
+
+  <div class="card">
+    <p class="lead">What this pack gives you</p>
+    <p>Professional, single-image prompts for every place the app shows a face: (A) the <b>hairstyle catalog heads</b> — one consistent model wearing the same clothes, same hair colour, only the cut changes; (B) <b>3 barber profile pictures</b>; (C) <b>3 client profile pictures</b>; (D) a clean <b>demo face</b> for the try-on. Generate them in Nano Banana 2, then drop them into the app folders listed at the end — the app already looks for them.</p>
+  </div>
+
+  <!-- GLOBAL RULES -->
+  <h2 class="sec">Global rules (add to every prompt)</h2>
+  <div class="card">
+    <table>
+      <tr><th>Rule</th><th>Why</th></tr>
+      <tr><td><b>Single portrait, one face, front view. No grid, no collage, no split panels, one image.</b></td><td>Stops the 2×2 sheet problem; gives a usable head.</td></tr>
+      <tr><td>Photorealistic, natural skin texture, real pores and stubble, soft studio light</td><td>Credible, not plastic "AI" look.</td></tr>
+      <tr><td>Plain neutral grey studio background</td><td>Consistent, clean, matches the app.</td></tr>
+      <tr><td>Keep hair colour and clothing consistent across a set</td><td>Cohesive, professional lookbook.</td></tr>
+      <tr><td>Catalog heads: vertical 3:4. Avatars: square 1:1.</td><td>Fits the card / round avatar slots.</td></tr>
+    </table>
+    <div class="note">In Nano Banana 2, for any "same man" prompt <b>attach the base image as a reference</b> — that's what locks the face, hair colour and t-shirt.</div>
+  </div>
+
+  <!-- SECTION A: CATALOG HEADS -->
+  <h2 class="sec">A · Hairstyle catalog — one consistent model, 6 cuts</h2>
+  <div class="card">
+    <p>Make the base head first, save it, then generate the 6 cuts <b>with the base attached as reference</b> so it's the same face, hair colour and t-shirt every time — only the haircut changes. These replace the 6 random photos in <code class="inline">public/styles/</code>.</p>
+
+    <div class="box"><div class="lbl"><span>BASE HEAD — make &amp; save first</span><span class="f">→ keep as base_model.jpg</span></div><code>Photorealistic studio headshot of a good-looking man in his early 30s, warm confident everyday look, medium dark-brown hair, short well-groomed stubble, natural skin with real texture, wearing a plain charcoal-grey crew-neck t-shirt, plain neutral grey background, soft even studio lighting, sharp focus, 4K. Single portrait, front view, one face, no grid, no collage.</code></div>
+
+    <div class="box"><div class="lbl"><span>A1 · The Fade</span><span class="f">→ public/styles/fade.jpg</span></div><code>Use the base model image. Same man, same face and identity, same dark-brown hair colour, same charcoal-grey t-shirt, same grey background — only the haircut changes to a clean modern skin fade with a short textured top. Photorealistic, vertical 3:4, front view, single portrait, no grid, 4K.</code></div>
+
+    <div class="box"><div class="lbl"><span>A2 · Textured Crop</span><span class="f">→ public/styles/crop.jpg</span></div><code>Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a textured French crop with faded sides and a short blunt fringe. Photorealistic, vertical 3:4, single portrait, no grid, 4K.</code></div>
+
+    <div class="box"><div class="lbl"><span>A3 · Pompadour</span><span class="f">→ public/styles/pomp.jpg</span></div><code>Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a classic pompadour with volume and height on top and neatly tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K.</code></div>
+
+    <div class="box"><div class="lbl"><span>A4 · Buzz Cut</span><span class="f">→ public/styles/buzz.jpg</span></div><code>Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a short uniform buzz cut clipped evenly all over. Photorealistic, vertical 3:4, single portrait, no grid, 4K.</code></div>
+
+    <div class="box"><div class="lbl"><span>A5 · Curly Top</span><span class="f">→ public/styles/curl.jpg</span></div><code>Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a curly top with defined natural curls and tapered sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K.</code></div>
+
+    <div class="box"><div class="lbl"><span>A6 · Slick Back</span><span class="f">→ public/styles/slick.jpg</span></div><code>Use the base model image. Same man, same face, same hair colour, same charcoal-grey t-shirt, same background — only the haircut changes to a slicked-back style with a sharp mid fade on the sides. Photorealistic, vertical 3:4, single portrait, no grid, 4K.</code></div>
+
+    <div class="note">This gives a clean, cohesive style menu (one model, six cuts). If you'd rather show six <b>different</b> men, just drop the "use the base model image / same man" part and describe a new man per card.</div>
+  </div>
+
+  <!-- SECTION B: BARBERS -->
+  <h2 class="sec">B · Barber profile pictures — 3 distinct people</h2>
+  <div class="card">
+    <p>Three clearly different, credible barbers for the booking screen and dashboard. Square 1:1 for the round avatar.</p>
+
+    <div class="box"><div class="lbl"><span>Barber 1 · Marcus</span><span class="f">→ public/avatars/barber-1.jpg</span></div><code>Photorealistic square headshot of a rugged male barber, late 30s, strong jaw, short faded sides with slicked-back dark hair, thick full dark beard, tattoos on the neck, confident friendly expression, wearing a black barber apron over a dark tee. Warm barbershop background softly blurred, natural skin texture, 4K. Single portrait, one face, no grid.</code></div>
+
+    <div class="box"><div class="lbl"><span>Barber 2 · Deniz</span><span class="f">→ public/avatars/barber-2.jpg</span></div><code>Photorealistic square headshot of a stylish male barber, early 30s, olive skin, neat short dark hair with a line-up, well-groomed short beard, a small gold earring, warm smile, wearing a black apron. Warm barbershop background softly blurred, natural skin texture, 4K. Single portrait, one face, no grid — a clearly different person from the other barbers.</code></div>
+
+    <div class="box"><div class="lbl"><span>Barber 3 · Leon</span><span class="f">→ public/avatars/barber-3.jpg</span></div><code>Photorealistic square headshot of a friendly male barber, 40s, shaved bald head, thick greying beard, glasses, calm confident look, wearing a black apron over a grey tee. Warm barbershop background softly blurred, natural skin texture, 4K. Single portrait, one face, no grid — clearly a different person from the other barbers.</code></div>
+  </div>
+
+  <!-- SECTION C: CLIENTS -->
+  <h2 class="sec">C · Client profile pictures — 3 distinct people</h2>
+  <div class="card">
+    <p>Three different everyday clients for the dashboard (James, Aaron, Ravi). Square 1:1.</p>
+
+    <div class="box"><div class="lbl"><span>Client 1 · James O.</span><span class="f">→ public/avatars/client-1.jpg</span></div><code>Photorealistic square headshot of an everyday man in his late 20s, fine light-brown hair a bit overgrown, light stubble, friendly relaxed expression, plain casual t-shirt, neutral soft-lit background, natural skin texture, 4K. Single portrait, one face, front view, no grid.</code></div>
+
+    <div class="box"><div class="lbl"><span>Client 2 · Aaron P.</span><span class="f">→ public/avatars/client-2.jpg</span></div><code>Photorealistic square headshot of a man in his mid 30s, thick dark hair, full short beard, square jaw, easy smile, casual shirt, neutral soft-lit background, natural skin texture, 4K. Single portrait, one face, front view, no grid — a clearly different person from the other clients.</code></div>
+
+    <div class="box"><div class="lbl"><span>Client 3 · Ravi S.</span><span class="f">→ public/avatars/client-3.jpg</span></div><code>Photorealistic square headshot of a man in his early 40s, wavy black hair, clean-shaven, warm confident look, smart-casual top, neutral soft-lit background, natural skin texture, 4K. Single portrait, one face, front view, no grid — a clearly different person from the other clients.</code></div>
+  </div>
+
+  <!-- SECTION D: DEMO FACE -->
+  <h2 class="sec">D · Try-on demo face (the "Use a demo face" button)</h2>
+  <div class="card">
+    <p>A single, clean, front-facing face for people who don't want to upload their own selfie. This one must be perfect for the AI hair try-on, so: front view, even light, forehead visible.</p>
+    <div class="box"><div class="lbl"><span>Demo face</span><span class="f">→ public/demo-face.jpg</span></div><code>Photorealistic front-facing studio portrait of an ordinary man in his early 30s, short-to-medium dark hair off the forehead, light stubble, neutral friendly expression, looking straight at the camera, even soft lighting, plain grey background, natural skin texture, sharp focus, 4K. Single portrait, one face, front view only, no grid, no collage.</code></div>
+    <div class="note">To wire this as the demo face, replace the drawn <code class="inline">DEMO_FACE</code> in <code class="inline">index.html</code> with <code class="inline">"demo-face.jpg"</code> — tell me and I'll do it.</div>
+  </div>
+
+  <!-- FILE MAP -->
+  <h2 class="sec">Where each image goes (the app already looks here)</h2>
+  <div class="card">
+    <table>
+      <tr><th>Image</th><th>Save to</th><th>Shows up in</th></tr>
+      <tr><td>6 catalog cuts</td><td><code class="inline">public/styles/fade.jpg … slick.jpg</code></td><td>Style-selection cards (client app)</td></tr>
+      <tr><td>3 barbers</td><td><code class="inline">public/avatars/barber-1.jpg … 3</code></td><td>Booking barber picker + dashboard</td></tr>
+      <tr><td>3 clients</td><td><code class="inline">public/avatars/client-1.jpg … 3</code></td><td>Dashboard client list + "In the chair"</td></tr>
+      <tr><td>Demo face</td><td><code class="inline">public/demo-face.jpg</code></td><td>"Use a demo face" (after wiring)</td></tr>
+    </table>
+    <div class="note"><b>Steps:</b> create the folder <code class="inline">public/avatars/</code> (styles already exists), save the images with these <b>exact names</b>, commit/push to GitHub → Vercel redeploys → the pictures appear. If any file is missing, the app quietly falls back to an emoji, so nothing breaks.</div>
+    <div class="warn"><b>Reminder for the actual try-on:</b> whatever photo goes <b>into</b> the "upload a selfie" step must be a <b>single front-facing face</b>. If you use one of these AI heads to test, use the single portrait — never the 2×2 reference sheet.</div>
+  </div>
+
+</div>
+</body>
+</html>
