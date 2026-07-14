@@ -402,6 +402,8 @@ const CLIENTS = [
 ];
 // small round avatar image with graceful fallback to an emoji if the file is missing
 function avatarImg(src,emoji){ return `<img src="${src}" alt="" class="avimg" onerror="this.replaceWith(document.createTextNode('${emoji||'🧔'}'))">`; }
+// style preview photo (styles/<id>.jpg) with graceful fallback to the drawn illustration
+function stylePhoto(id){ return `<img src="styles/${id}.jpg" alt="" class="stylephoto" onerror="this.outerHTML=hairSVG('${id}',150)">`; }
 
 /* ---------------- STATE ---------------- */
 let photo=null, chosenStyle=null, booking={barber:null,svc:null,time:null};
@@ -587,12 +589,12 @@ function openClient(i){
     <div class="ba" style="margin-top:14px;max-width:420px">
       <div class="col"><small>CLIENT CHOSE</small>
         <figure style="aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#0a0b0e;display:grid;place-items:center;border:1px solid var(--line)">
-          ${hairSVG(styleId(c.style),150)}</figure>
+          ${stylePhoto(styleId(c.style))}</figure>
         <div style="margin-top:6px;font-weight:700">${c.style}</div>
       </div>
       <div class="col"><small>WILL DELIVER</small>
         <figure id="deliverFig" style="aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#0a0b0e;display:grid;place-items:center;border:1px solid var(--gold)">
-          <span id="deliverIcon">${hairSVG(styleId(c.style),150)}</span></figure>
+          <span id="deliverIcon">${stylePhoto(styleId(c.style))}</span></figure>
         <div style="margin-top:6px;font-weight:700" id="deliverName">${c.style}</div>
       </div>
     </div>
@@ -623,7 +625,7 @@ function openClient(i){
     el.onclick=()=>{ redesigned=s;
       document.querySelectorAll('#swapGrid .swap').forEach(x=>x.classList.remove('on'));
       el.classList.add('on');
-      document.getElementById('deliverIcon').innerHTML=hairSVG(s.id,150);
+      document.getElementById('deliverIcon').innerHTML=stylePhoto(s.id);
       document.getElementById('deliverName').textContent=s.name+' (adjusted)';
       document.getElementById('deliverFig').style.boxShadow='0 0 0 2px rgba(200,164,92,.4)';
     };
