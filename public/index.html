@@ -144,6 +144,20 @@
   .swap .ic{font-size:26px;display:block;margin-bottom:4px}
   .swap.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(200,164,92,.3)}
   @media(max-width:820px){.side{width:100%;max-width:380px}.dash{width:100%}}
+
+  /* ---- Clean CAPTURE mode for screen recordings: ?capture=client / ?capture=barber ---- */
+  .capture .topbar{display:none!important}
+  .capture #sideCards{display:none!important}
+  .capture .wrap{padding:0;max-width:none}
+  .capture .stage{display:block;gap:0}
+  /* client: full-bleed phone, no bezel/notch */
+  .cap-client #dash{display:none!important}
+  .cap-client .phone{width:100vw!important;max-width:none;padding:0;border-radius:0;box-shadow:none;background:var(--bg)}
+  .cap-client .phone .notch{display:none}
+  .cap-client .screen{height:100vh;border-radius:0}
+  /* barber: full-screen dashboard */
+  .cap-barber .phone{display:none!important}
+  .cap-barber .dash{display:block!important;width:100vw!important;max-width:none;border:none;border-radius:0;min-height:100vh}
 </style>
 </head>
 <body>
@@ -644,6 +658,14 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 
 /* init */
 renderStyles();
+
+/* Clean capture mode for screen recordings: ?capture=client or ?capture=barber */
+(function(){
+  const cap=new URLSearchParams(location.search).get('capture');
+  if(cap!=='client' && cap!=='barber') return;
+  document.body.classList.add('capture','cap-'+cap);
+  setView(cap==='barber' ? 'barber' : 'customer');
+})();
 </script>
 </body>
 </html>
