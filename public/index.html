@@ -119,6 +119,13 @@
   .field label{font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
   .chip{background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:9px 13px;border-radius:999px;font-size:12px;cursor:pointer;font-weight:600}
+  .stars{display:flex;gap:10px;margin-top:8px}
+  .star{font-size:40px;line-height:1;cursor:pointer;color:#3a3f49;transition:.12s;user-select:none}
+  .star.on{color:var(--gold2)}
+  .star:active{transform:scale(1.15)}
+  .dstars{display:inline-flex;gap:5px;vertical-align:middle}
+  .dstar{font-size:22px;line-height:1;cursor:pointer;color:#3a3f49}
+  .dstar.on{color:var(--gold2)}
   .chip.on{background:var(--gold);color:#1a1305;border-color:var(--gold)}
 
   .sheet{position:absolute;inset:0;background:var(--bg);display:none;flex-direction:column}
@@ -312,9 +319,28 @@
                 <div class="kpi"><span>Next reward</span><b>Free beard oil</b></div>
               </div>
               <div class="pad" style="padding-top:0">
-                <button class="btn" onclick="go('home')">Done</button>
+                <button class="btn" onclick="go('rate')">Rate your visit →</button>
                 <button class="btn ghost" onclick="setView('barber')">See the barber’s side →</button>
               </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 7: RATE (client) -->
+          <section class="screen-c" data-c="rate" hidden>
+            <div class="pad" style="padding-bottom:4px">
+              <div class="eyebrow">Your visit</div>
+              <h2 class="big" style="font-size:22px">How was your cut?</h2>
+              <p class="lede">Rate your barber and leave a tip.</p>
+            </div>
+            <div class="field"><label>Your rating</label>
+              <div class="stars" id="rateStars"></div>
+            </div>
+            <div class="field"><label>Add a tip</label>
+              <div class="chips" id="tipChips"></div>
+            </div>
+            <div class="pad" style="padding-top:8px">
+              <button class="btn" onclick="submitRating()">Submit</button>
+              <button class="btn ghost" onclick="go('home')">Skip</button>
             </div>
           </section>
 
@@ -449,6 +475,30 @@ function go(name){
   document.getElementById('custScroll').scrollTop=0;
   if(name==='styles') renderStyles();
   if(name==='book') renderBook();
+  if(name==='rate') renderRate();
+}
+
+/* ---------------- CLIENT RATING + TIP ---------------- */
+let rating=0, tip=null;
+function renderRate(){
+  rating=0; tip=null;
+  const s=document.getElementById('rateStars'); s.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const el=document.createElement('span'); el.className='star'; el.textContent='★';
+    el.onclick=()=>{ rating=i; [...s.children].forEach((c,idx)=>c.classList.toggle('on',idx<rating)); };
+    s.appendChild(el);
+  }
+  const t=document.getElementById('tipChips'); t.innerHTML='';
+  ['£2','£5','£10'].forEach(v=>{
+    const el=document.createElement('div'); el.className='chip'; el.textContent=v;
+    el.onclick=()=>{ tip=v; [...t.children].forEach(c=>c.classList.toggle('on',c.textContent===v)); };
+    t.appendChild(el);
+  });
+}
+function submitRating(){
+  if(!rating){ toast('Tap the stars to rate'); return; }
+  toast('Thanks! '+'★'.repeat(rating)+(tip?' · '+tip+' tip':'')+' sent ✓');
+  setTimeout(()=>go('home'),1000);
 }
 
 // upload
@@ -625,12 +675,24 @@ function openClient(i){
       ${c.note?`<div class="note" style="margin:12px 0 0">Note: ${c.note}</div>`:''}
     </div>
 
+    <div class="card" style="margin-top:16px;max-width:420px">
+      <h3>Rate this client</h3>
+      <div class="dstars" id="dRateStars"></div>
+    </div>
+
     <div class="row" style="margin-top:16px;max-width:420px">
       <button class="btn ghost" onclick="renderDash();document.getElementById('dashMain').innerHTML='<div class=tag>Select a client</div><p class=lede>Tap a booking on the left.</p>'">← Back</button>
       <button class="btn" onclick="approveCut()">Approve — we’ll cut this ✓</button>
     </div>
     <div class="toast" id="dashToast"></div>
   `;
+  const ds=document.getElementById('dRateStars'); let drate=0;
+  for(let i=1;i<=5;i++){
+    const st=document.createElement('span'); st.className='dstar'; st.textContent='★';
+    st.onclick=()=>{ drate=i; [...ds.children].forEach((c,idx)=>c.classList.toggle('on',idx<drate));
+      const t=document.getElementById('dashToast'); t.textContent='Client rated '+drate+'★ · thanks for coming ✓'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
+    ds.appendChild(st);
+  }
   const sw=document.getElementById('swapGrid');
   STYLES.forEach(s=>{
     const el=document.createElement('div'); el.className='swap';
@@ -661,10 +723,14 @@ renderStyles();
 
 /* Clean capture mode for screen recordings: ?capture=client or ?capture=barber */
 (function(){
-  const cap=new URLSearchParams(location.search).get('capture');
+  const params=new URLSearchParams(location.search);
+  const cap=params.get('capture');
   if(cap!=='client' && cap!=='barber') return;
   document.body.classList.add('capture','cap-'+cap);
   setView(cap==='barber' ? 'barber' : 'customer');
+  // jump straight to a screen for clean recording, e.g. ?capture=client&screen=rate
+  const screen=params.get('screen');
+  if(cap==='client' && screen) go(screen);
 })();
 </script>
 </body>
