@@ -232,16 +232,18 @@
               <h2 class="big" style="font-size:22px">Upload your selfie</h2>
               <p class="lede">For the best likeness: look <b>straight at the camera</b>, good even light, <b>no hat, no filter</b>, hair off the forehead. A clear, sharp photo keeps your face recognisable.</p>
             </div>
-            <label class="upload" id="dropzone">
-              <input type="file" accept="image/*" id="fileInput" hidden>
+            <div class="upload" id="dropzone" onclick="openCamera()">
               <div class="ph" id="dzPlaceholder">
-                <div class="ic">📸</div>
-                <div style="margin-top:8px;font-weight:700;color:var(--ink)">Take or upload a photo</div>
-                <small>tap to use your camera or gallery</small>
+                <div class="ic">📷</div>
+                <div style="margin-top:8px;font-weight:700;color:var(--ink)">Take a photo</div>
+                <small>tap to open your camera</small>
               </div>
-            </label>
+            </div>
+            <input type="file" accept="image/*" id="fileInput" hidden>
             <div class="field" style="text-align:center">
-              <button class="linklike" onclick="useDemoFace()">or use a demo face</button>
+              <button class="linklike" onclick="document.getElementById('fileInput').click()">upload a photo</button>
+              <span style="color:var(--muted);font-size:13px"> · </span>
+              <button class="linklike" onclick="useDemoFace()">demo face</button>
             </div>
             <div class="pad" style="padding-top:8px">
               <button class="btn" id="toStyles" disabled onclick="go('styles')">Continue →</button>
@@ -353,6 +355,13 @@
             </div>
           </section>
 
+        </div>
+        <div class="cammodal" id="camModal">
+          <video id="camVideo" autoplay playsinline muted></video>
+          <div class="camctrls">
+            <button class="btn ghost" onclick="closeCamera()">Cancel</button>
+            <button class="btn" onclick="capturePhoto()">Capture ●</button>
+          </div>
         </div>
         <div class="toast" id="toast"></div>
       </div>
@@ -523,6 +532,34 @@ function useDemoFace(){
   t.onload=()=>downscale('demo-face.jpg', setPhoto);
   t.onerror=()=>setPhoto(DEMO_FACE);
   t.src='demo-face.jpg';
+}
+// live front camera; falls back to the phone's native camera if not allowed
+let camStream=null;
+async function openCamera(){
+  const modal=document.getElementById('camModal'), v=document.getElementById('camVideo');
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) throw new Error('no camera api');
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    v.srcObject=camStream; modal.classList.add('show');
+  }catch(e){
+    // fallback: open the phone's native camera via the file input
+    const inp=document.getElementById('fileInput');
+    inp.setAttribute('capture','user'); inp.click();
+    setTimeout(()=>inp.removeAttribute('capture'),800);
+  }
+}
+function capturePhoto(){
+  const v=document.getElementById('camVideo');
+  const c=document.createElement('canvas'); c.width=v.videoWidth||720; c.height=v.videoHeight||960;
+  c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+  const data=c.toDataURL('image/jpeg',0.92);
+  closeCamera();
+  downscale(data,setPhoto);
+}
+function closeCamera(){
+  if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
+  document.getElementById('camVideo').srcObject=null;
+  document.getElementById('camModal').classList.remove('show');
 }
 // Shrink big phone photos, but RESPECT EXIF orientation (phones tag rotation
 // instead of rotating pixels). createImageBitmap with imageOrientation:'from-image'
