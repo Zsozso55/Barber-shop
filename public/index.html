@@ -49,7 +49,9 @@
   .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
   .card h3{font-size:12px;letter-spacing:2px;color:var(--gold);margin-bottom:10px;text-transform:uppercase}
   .card p{color:var(--muted);font-size:13px;line-height:1.55}
-  .kpi{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .kpi{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px;line-height:1.35}
+  .kpi span{flex:1}
+  .kpi b{text-align:right;flex-shrink:0;max-width:52%}
   .kpi:last-child{border:none}
   .kpi b{color:var(--gold2)}
 
@@ -148,6 +150,8 @@
   .dash-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel2)}
   .dash-head b{letter-spacing:1px}
   .dash-body{display:flex;min-height:520px}
+  .dashfoot{border-top:1px solid var(--line);padding:12px;text-align:center;color:var(--muted);font-size:12px;letter-spacing:1.5px}
+  .dashfoot b{color:var(--gold2)}
   .dash-list{width:280px;border-right:1px solid var(--line)}
   .dash-main{flex:1;padding:20px}
   .tag{display:inline-block;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
@@ -220,7 +224,8 @@
                 <div class="kpi"><span>Preview in ~4 seconds</span><b>✓</b></div>
                 <div class="kpi"><span>Book your chair, skip the queue</span><b>✓</b></div>
               </div>
-              <div class="caption">Add to Home Screen · works offline · no download</div>
+              <div class="caption">Add to Home Screen · No Download</div>
+              <div class="caption" style="margin-top:6px;letter-spacing:1.5px;opacity:.75">Made by <b style="color:var(--gold2)">AI MEDIA CREATOR</b></div>
             </div>
           </section>
 
@@ -380,6 +385,7 @@
           <p class="lede">Tap a booking on the left to open their profile and AI look.</p>
         </div>
       </div>
+      <div class="dashfoot">Made by <b>AI MEDIA CREATOR</b></div>
     </div>
 
     <!-- side info cards (shown next to phone) -->
@@ -390,13 +396,13 @@
       </div>
       <div class="card">
         <h3>The magic moment</h3>
-        <p>The barber opens the client’s chosen look at the chair. If the real hair can’t deliver it, one tap re-generates a realistic, guaranteed cut from the barber’s own portfolio — no awkward “that won’t work”.</p>
+        <p>The barber opens the client’s chosen look at the chair. If their natural hair isn't suited for it, one tap regenerates a realistic, guaranteed cut from the barber's own portfolio, so no awkward 'that won't work'.</p>
       </div>
       <div class="card">
         <h3>Business impact</h3>
-        <div class="kpi"><span>Reminders & easy rebooking</span><b>↓ no-shows</b></div>
-        <div class="kpi"><span>Guided upsell</span><b>↑ product sales</b></div>
-        <div class="kpi"><span>Recurring revenue</span><b>£100–300/mo</b></div>
+        <div class="kpi"><span>Reminders & easy rebooking</span><b>↓ Less no-shows</b></div>
+        <div class="kpi"><span>Zero-anxiety cuts</span><b>↑ More repeat clients</b></div>
+        
       </div>
     </div>
 
