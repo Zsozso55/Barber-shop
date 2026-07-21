@@ -119,6 +119,11 @@
   .field label{font-size:11px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
   .chip{background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:9px 13px;border-radius:999px;font-size:12px;cursor:pointer;font-weight:600}
+  .cammodal{position:absolute;inset:0;background:#000;display:none;flex-direction:column;z-index:40}
+  .cammodal.show{display:flex}
+  .cammodal video{flex:1;width:100%;object-fit:cover;transform:scaleX(-1)}
+  .camctrls{display:flex;gap:10px;padding:16px 18px 22px;background:#000}
+  .camctrls .btn{flex:1}
   .stars{display:flex;gap:10px;margin-top:8px}
   .star{font-size:40px;line-height:1;cursor:pointer;color:#3a3f49;transition:.12s;user-select:none}
   .star.on{color:var(--gold2)}
@@ -230,11 +235,15 @@
               <input type="file" accept="image/*" id="fileInput" hidden>
               <div class="ph" id="dzPlaceholder">
                 <div class="ic">📸</div>
-                <div style="margin-top:8px;font-weight:700;color:var(--ink)">Tap to add a photo</div>
+                <div style="margin-top:8px;font-weight:700;color:var(--ink)">Take or upload a photo</div>
                 <small>or use a demo face</small>
               </div>
             </label>
-            <div class="field"><button class="btn ghost" onclick="useDemoFace()">Use a demo face</button></div>
+            <div class="field">
+              <button class="btn" onclick="openCamera()">📷 Take a photo</button>
+              <button class="btn ghost" style="margin-top:10px" onclick="document.getElementById('fileInput').click()">Upload a photo</button>
+              <button class="btn ghost" style="margin-top:10px" onclick="useDemoFace()">Use a demo face</button>
+            </div>
             <div class="pad" style="padding-top:8px">
               <button class="btn" id="toStyles" disabled onclick="go('styles')">Continue →</button>
             </div>
@@ -345,6 +354,13 @@
             </div>
           </section>
 
+        </div>
+        <div class="cammodal" id="camModal">
+          <video id="camVideo" autoplay playsinline muted></video>
+          <div class="camctrls">
+            <button class="btn ghost" onclick="closeCamera()">Cancel</button>
+            <button class="btn" onclick="capturePhoto()">Capture ●</button>
+          </div>
         </div>
         <div class="toast" id="toast"></div>
       </div>
@@ -515,6 +531,32 @@ function useDemoFace(){
   t.onload=()=>downscale('demo-face.jpg', setPhoto);
   t.onerror=()=>setPhoto(DEMO_FACE);
   t.src='demo-face.jpg';
+}
+// live front camera; falls back to the phone's native camera if not allowed
+let camStream=null;
+async function openCamera(){
+  const modal=document.getElementById('camModal'), v=document.getElementById('camVideo');
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    v.srcObject=camStream; modal.classList.add('show');
+  }catch(e){
+    const inp=document.getElementById('fileInput');
+    inp.setAttribute('capture','user'); inp.click();
+    setTimeout(()=>inp.removeAttribute('capture'),600);
+  }
+}
+function capturePhoto(){
+  const v=document.getElementById('camVideo');
+  const c=document.createElement('canvas'); c.width=v.videoWidth||720; c.height=v.videoHeight||960;
+  c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+  const data=c.toDataURL('image/jpeg',0.92);
+  closeCamera();
+  downscale(data,setPhoto);
+}
+function closeCamera(){
+  if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
+  document.getElementById('camVideo').srcObject=null;
+  document.getElementById('camModal').classList.remove('show');
 }
 // Shrink big phone photos, but RESPECT EXIF orientation (phones tag rotation
 // instead of rotating pixels). createImageBitmap with imageOrientation:'from-image'
@@ -732,6 +774,30 @@ renderStyles();
   // jump straight to a screen for clean recording, e.g. ?capture=client&screen=rate
   const screen=params.get('screen');
   if(cap==='client' && screen) go(screen);
+})();
+
+/* Optional soft access gate (deterrent only — NOT real security, the password
+   lives in the page source). Keep OFF for the demo you send to prospects.
+   Turn ON only while private/in development. For real protection use Vercel's
+   built-in Password Protection instead. */
+const GATE_ENABLED = false;
+const GATE_PASSWORD = "ironhill2026";
+(function(){
+  if(!GATE_ENABLED) return;
+  if(new URLSearchParams(location.search).get('capture')) return; // don't block recording
+  if(sessionStorage.getItem('ih_ok')==='1') return;
+  const o=document.createElement('div');
+  o.style.cssText='position:fixed;inset:0;z-index:9999;background:#0e0f12;display:grid;place-items:center;font-family:'+getComputedStyle(document.body).fontFamily;
+  o.innerHTML='<div style="text-align:center;max-width:300px;padding:24px">'
+    +'<div style="width:52px;height:52px;border:2px solid #c8a45c;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;color:#e6c987;font-size:22px">✂</div>'
+    +'<div style="color:#f2efe8;letter-spacing:3px;font-weight:800;margin-bottom:14px">IRONHILL</div>'
+    +'<input id="ihpw" type="password" placeholder="Access code" style="width:100%;padding:12px;border-radius:10px;border:1px solid #2a2e37;background:#16181d;color:#f2efe8;text-align:center">'
+    +'<button id="ihgo" style="width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:#c8a45c;color:#1a1305;font-weight:800;cursor:pointer">Enter</button>'
+    +'<div id="iherr" style="color:#d8664f;font-size:12px;margin-top:8px;height:14px"></div></div>';
+  document.body.appendChild(o);
+  const tryit=()=>{ if(document.getElementById('ihpw').value===GATE_PASSWORD){ sessionStorage.setItem('ih_ok','1'); o.remove(); } else { document.getElementById('iherr').textContent='Wrong code'; } };
+  o.querySelector('#ihgo').onclick=tryit;
+  o.querySelector('#ihpw').addEventListener('keydown',e=>{ if(e.key==='Enter') tryit(); });
 })();
 </script>
 </body>
